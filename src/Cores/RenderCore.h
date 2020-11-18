@@ -2,11 +2,11 @@
 #include <Tools/Logging.h>
 #include <Cores/EngineCore.h>
 
-namespace lk{
+namespace Leng{
 
     class RenderCore{
         private:
-            lk::EngineCore _engineCore;
+            Leng::EngineCore _engineCore;
 
         public:
             void load();

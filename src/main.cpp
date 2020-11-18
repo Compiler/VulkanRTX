@@ -1,10 +1,9 @@
-
 #include <Tools/Logging.h>
 #include <Cores/RenderCore.h>
 int main(){
     
     WARN("Program begin");
-    lk::RenderCore core;
+    Leng::RenderCore core;
 
     core.load();
     int count = 0;

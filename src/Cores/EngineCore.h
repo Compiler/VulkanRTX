@@ -1,14 +1,15 @@
 #pragma once
+#define GLFW_INCLUDE_VULKAN
 #include <Rendering/Window.h>
 #include <Tools/Logging.h>
 
-namespace lk{
+namespace Leng{
 
     class EngineCore{
 
         private:
             Window* _window;
-        
+            VkInstance _vulkanInstance;
 
         public:
             void load();

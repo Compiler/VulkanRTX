@@ -1,5 +1,5 @@
 #include "RenderCore.h"
-namespace lk{
+namespace Leng{
 
     void RenderCore::load(){
         DEBUG("RenderCore Loading...");

@@ -31,25 +31,30 @@ LIBS = -L $(GLFW_LIB) -L$(VULKAN_LIB)
 LINKS = -lglfw3 -lgdi32 -lvulkan-1 -lpthread
 
 #========================OBJECTS========================#
+STARTUP_OBJS = $(OUT_DIR)/Startup.o
 RENDERING_OBJS = $(OUT_DIR)/Window.o
 CORE_OBJS = $(OUT_DIR)/RenderCore.o $(OUT_DIR)/EngineCore.o
-OBJS = $(CORE_OBJS) $(ENGINE_CORE_OBJS) $(RENDERING_OBJS)
+OBJS = $(CORE_OBJS) $(ENGINE_CORE_OBJS) $(RENDERING_OBJS) $(STARTUP_OBJS)
 
 
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
 
 
 main: $(ENTRY_POINT) $(OBJS)
-	$(ALL_SETTINGS) -o $(OUT_DIR)/$(LAUNCHER_NAME) $^ $(LINKS)
+	$(ALL_SETTINGS) -DDEBUG_MODE -o $(OUT_DIR)/$(LAUNCHER_NAME) $^ $(LINKS)
 	./$(OUT_DIR)/$(LAUNCHER_NAME).exe
 	
-
+release: $(ENTRY_POINT) $(OBJS)
+	$(ALL_SETTINGS) -DRELEASE_MODE -o $(OUT_DIR)/$(LAUNCHER_NAME) $^ $(LINKS)
+	./$(OUT_DIR)/$(LAUNCHER_NAME).exe
 
 $(CORE_OBJS): $(OUT_DIR)/%.o: src/Cores/%.cpp
 	$(ALL_SETTINGS) -c $< -o $@  
 
-
 $(RENDERING_OBJS): $(OUT_DIR)/%.o: src/Rendering/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
+
+$(STARTUP_OBJS): $(OUT_DIR)/%.o: src/Startup/%.cpp
 	$(ALL_SETTINGS) -c $< -o $@  
 
   

@@ -6,34 +6,45 @@ namespace Leng{
     void EngineCore::load(){
         DEBUG("EngineCore Loading...");
         const char* appName = "Vulkan Raytracing";
-        _window = new Leng::Window(1920, 1080, appName);
+        _window = new Leng::Window(400, 400.0 / (16.0 / 9.0), appName);
 
-        VkApplicationInfo appInfo{};
-        appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-        appInfo.pApplicationName = appName;
-        appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.pEngineName = "Leng";
-        appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_0;
+       _vulkanInstance = Startup::createVKInstance("Vulkan RayTracing", "Leng");
+       validatationLayersAssert();
+    }
 
+    void EngineCore::validatationLayersAssert(){
+        uint32_t layerCount;
+        vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
-        VkInstanceCreateInfo createInfo{};
-        createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-        createInfo.pApplicationInfo = &appInfo;
+        std::vector<VkLayerProperties> availableLayers(layerCount);
+        vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+        bool validationLayersSupported = false;
+        const std::vector<const char*> _validationLayers = {"VK_LAYER_KHRONOS_validation"};
+        for (const char* layerName : _validationLayers) {
+            bool layerFound = false;
 
-        uint32_t glfwExtensionCount = 0;
-        const char** glfwExtensions;
-        glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-        createInfo.enabledExtensionCount = glfwExtensionCount;
-        createInfo.ppEnabledExtensionNames = glfwExtensions;
-        createInfo.enabledLayerCount = 0;
-        VkResult result = vkCreateInstance(&createInfo, nullptr, &_vulkanInstance);
+            for (const auto& layerProperties : availableLayers) {
+                if (strcmp(layerName, layerProperties.layerName) == 0) {
+                    layerFound = true;
+                    break;
+                }
+            }
 
-        if(result != VK_SUCCESS){
-            ERROR("Failed to create vulkan instance");
-        }else{
-            DEBUG("Vulkan Instance Created!");
-        } 
+            if (!layerFound) {
+                validationLayersSupported = false;
+            }
+        }
+
+        validationLayersSupported = true;
+
+        #ifdef DEBUG_MODE
+            if(!validationLayersSupported){
+                ERROR("Debug mode activated but couldn't initialize validation layers");
+            }
+        #else
+            DEBUG("Validation layers initialized");
+        #endif
+
 
     }
 
@@ -48,6 +59,9 @@ namespace Leng{
 
     void EngineCore::unload(){
         WARN("Unloading EngineCore...");
+
+        vkDestroyInstance(_vulkanInstance, nullptr);
+
         _window->destroy();
         delete(_window);
         glfwTerminate();

@@ -1,8 +1,11 @@
 #pragma once
+#include <Leng.h>
 #define GLFW_INCLUDE_VULKAN
 #include <Rendering/Window.h>
+#include <Startup/Startup.h>
 #include <Tools/Logging.h>
-
+#include <vector>
+#include <cstring>
 namespace Leng{
 
     class EngineCore{
@@ -10,6 +13,7 @@ namespace Leng{
         private:
             Window* _window;
             VkInstance _vulkanInstance;
+            void validatationLayersAssert();
 
         public:
             void load();

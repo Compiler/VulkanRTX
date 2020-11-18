@@ -10,7 +10,7 @@ ENTRY_POINT = src/main.cpp
 
 #Libs
 VULKAN_ROOT = C:/VulkanSDK/1.2.154.1/
-VULKAN_INC = $(VULKAN_ROOT)Include/
+VULKAN_INC = extern/Vulkan/Include/
 VULKAN_LIB = $(VULKAN_ROOT)Lib32/
 
 GLAD_ROOT = extern/glad/

@@ -16,6 +16,7 @@ namespace Leng{
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.apiVersion = VK_API_VERSION_1_0;
 
+
         VkInstanceCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
         createInfo.pApplicationInfo = &appInfo;
@@ -27,6 +28,7 @@ namespace Leng{
         createInfo.ppEnabledExtensionNames = glfwExtensions;
         createInfo.enabledLayerCount = 0;
         VkResult result = vkCreateInstance(&createInfo, nullptr, &_vulkanInstance);
+
         if(result != VK_SUCCESS){
             ERROR("Failed to create vulkan instance");
         }else{

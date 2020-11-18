@@ -31,8 +31,9 @@ LIBS = -L $(GLFW_LIB) -L$(VULKAN_LIB)
 LINKS = -lglfw3 -lgdi32 -lvulkan-1 -lpthread
 
 #========================OBJECTS========================#
-CORE_OBJS = $(OUT_DIR)/RenderCore.o
-OBJS = $(CORE_OBJS)
+RENDERING_OBJS = $(OUT_DIR)/Window.o
+CORE_OBJS = $(OUT_DIR)/RenderCore.o $(OUT_DIR)/EngineCore.o
+OBJS = $(CORE_OBJS) $(ENGINE_CORE_OBJS) $(RENDERING_OBJS)
 
 
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
@@ -44,5 +45,11 @@ main: $(ENTRY_POINT) $(OBJS)
 	
 
 
-$(CORE_OBJS): $(OUT_DIR)/%.o: src/%.cpp
+$(CORE_OBJS): $(OUT_DIR)/%.o: src/Cores/%.cpp
 	$(ALL_SETTINGS) -c $< -o $@  
+
+
+$(RENDERING_OBJS): $(OUT_DIR)/%.o: src/Rendering/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
+
+  

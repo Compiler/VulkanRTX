@@ -1,6 +1,6 @@
 
 #include <Tools/Logging.h>
-#include <RenderCore.h>
+#include <Cores/RenderCore.h>
 int main(){
     
     WARN("Program begin");
@@ -8,7 +8,7 @@ int main(){
 
     core.load();
     int count = 0;
-    while(count++ < 560000000){
+    while(core.isRunning()){
         core.update();
         core.render();
     }

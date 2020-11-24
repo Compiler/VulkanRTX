@@ -1,8 +1,9 @@
 #include "Startup.h"
 namespace Leng{
 
-    VkInstance Startup::createVKInstance(const char* appName, const char* engineName){
+    const std::vector<const char*> Startup::validationLayers = { "VK_LAYER_KHRONOS_validation" };
 
+    VkInstance Startup::createVKInstance(const char* appName, const char* engineName, bool enableValidationLayers){
         VkApplicationInfo appInfo{};
         appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
         appInfo.pApplicationName = appName;
@@ -22,11 +23,15 @@ namespace Leng{
         createInfo.enabledExtensionCount = glfwExtensionCount;
         createInfo.ppEnabledExtensionNames = glfwExtensions;
         createInfo.enabledLayerCount = 0;
+        if(enableValidationLayers){
+            createInfo.enabledLayerCount = (uint32_t)(validationLayers.size());
+            createInfo.ppEnabledLayerNames = validationLayers.data();
+        }
         VkInstance vulkanInstance;
         VkResult result = vkCreateInstance(&createInfo, nullptr, &vulkanInstance);
 
         if(result != VK_SUCCESS){
-            ERROR("Failed to create vulkan instance");
+            ERROR("Failed to create vulkan instance : %d", result);
         }else{
             DEBUG("Vulkan Instance Created!");
         } 
@@ -37,6 +42,12 @@ namespace Leng{
         std::vector<VkExtensionProperties> extensions(extensionCount);
         vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
         return vulkanInstance;
+    }
+
+
+    VkPhysicalDevice Startup::selectPhysicalDevice(){
+
+
     }
 
 }

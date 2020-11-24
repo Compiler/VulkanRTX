@@ -8,8 +8,9 @@ namespace Leng{
         const char* appName = "Vulkan Raytracing";
         _window = new Leng::Window(400, 400.0 / (16.0 / 9.0), appName);
 
-       _vulkanInstance = Startup::createVKInstance("Vulkan RayTracing", "Leng");
        validatationLayersAssert();
+       _vulkanInstance = Startup::createVKInstance("Vulkan RayTracing", "Leng", false);
+       _selectedDevice = Startup::selectPhysicalDevice();
     }
 
     void EngineCore::validatationLayersAssert(){
@@ -37,13 +38,12 @@ namespace Leng{
 
         validationLayersSupported = true;
 
-        #ifdef DEBUG_MODE
-            if(!validationLayersSupported){
-                ERROR("Debug mode activated but couldn't initialize validation layers");
-            }
-        #else
+        if(__DEBUG_MODE && !validationLayersSupported){
+            ERROR("Debug mode activated but couldn't initialize validation layers");
+        }else{
             DEBUG("Validation layers initialized");
-        #endif
+
+        }
 
 
     }

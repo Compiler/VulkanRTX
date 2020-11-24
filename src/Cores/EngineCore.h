@@ -13,6 +13,7 @@ namespace Leng{
         private:
             Window* _window;
             VkInstance _vulkanInstance;
+            VkPhysicalDevice _selectedDevice;
             void validatationLayersAssert();
 
         public:

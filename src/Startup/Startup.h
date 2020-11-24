@@ -7,7 +7,10 @@ namespace Leng{
 
     class Startup{
         public:        
-            static VkInstance createVKInstance(const char* appName, const char* engineName);
+            static VkInstance createVKInstance(const char* appName, const char* engineName, bool enableValidationLayers = true);
+            static VkPhysicalDevice selectPhysicalDevice();
+            static const std::vector<const char*> validationLayers;
+
         
     };
 

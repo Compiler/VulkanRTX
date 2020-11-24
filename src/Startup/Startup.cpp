@@ -44,10 +44,45 @@ namespace Leng{
         return vulkanInstance;
     }
 
+    bool Startup::_isDeviceSuitable(VkPhysicalDevice device){
+        VkPhysicalDeviceProperties deviceProperties;
+        vkGetPhysicalDeviceProperties(device, &deviceProperties);
+        LOG("Testing: %s", deviceProperties.deviceName);
 
-    VkPhysicalDevice Startup::selectPhysicalDevice(){
+        VkPhysicalDeviceFeatures deviceFeatures;
+        vkGetPhysicalDeviceFeatures(device, &deviceFeatures);
+        QueueFamilyIndices indices = VkHelpers::findQueueFamilies(device);
+        return deviceProperties.deviceType == VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU && indices.hasAllValues();
 
+    }
 
+    VkPhysicalDevice Startup::selectPhysicalDevice(VkInstance curInstance){
+        VkPhysicalDevice deviceToReturn;
+        uint32_t deviceCount = 0;
+        vkEnumeratePhysicalDevices(curInstance, &deviceCount, nullptr);
+        std::vector<VkPhysicalDevice> devices(deviceCount);
+        vkEnumeratePhysicalDevices(curInstance, &deviceCount, devices.data());
+
+        LOG("Size: %d", devices.size());
+        if(deviceCount == 0){
+            ERROR("No devices found");
+        }else{
+            LOG("%d devices found", deviceCount);
+        }
+        bool deviceSet = false;
+        for (const auto& device : devices) {
+            if (_isDeviceSuitable(device)) {
+                deviceSet = true;
+                deviceToReturn = device;
+                break;
+            }
+        }
+        if(!deviceSet){
+            ERROR("No device chosen");
+        }else{
+            DEBUG("Device chosen");
+        }
+        return deviceToReturn;
     }
 
 }

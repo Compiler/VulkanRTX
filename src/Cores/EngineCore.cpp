@@ -10,7 +10,7 @@ namespace Leng{
 
        validatationLayersAssert();
        _vulkanInstance = Startup::createVKInstance("Vulkan RayTracing", "Leng", false);
-       _selectedDevice = Startup::selectPhysicalDevice();
+       _selectedDevice = Startup::selectPhysicalDevice(_vulkanInstance);
     }
 
     void EngineCore::validatationLayersAssert(){

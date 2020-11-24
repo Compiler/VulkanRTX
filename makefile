@@ -32,9 +32,10 @@ LINKS = -lglfw3 -lgdi32 -lvulkan-1 -lpthread
 
 #========================OBJECTS========================#
 STARTUP_OBJS = $(OUT_DIR)/Startup.o
+TOOLS_OBJS = $(OUT_DIR)/VkHelpers.o
 RENDERING_OBJS = $(OUT_DIR)/Window.o
 CORE_OBJS = $(OUT_DIR)/RenderCore.o $(OUT_DIR)/EngineCore.o
-OBJS = $(CORE_OBJS) $(ENGINE_CORE_OBJS) $(RENDERING_OBJS) $(STARTUP_OBJS)
+OBJS = $(CORE_OBJS) $(ENGINE_CORE_OBJS) $(RENDERING_OBJS) $(STARTUP_OBJS) $(TOOLS_OBJS)
 
 
 ALL_SETTINGS = $(CXX) $(CXXFLAGS) $(LIBS) $(INC) 
@@ -49,6 +50,10 @@ release: $(ENTRY_POINT) $(OBJS)
 	./$(OUT_DIR)/$(LAUNCHER_NAME).exe
 
 $(CORE_OBJS): $(OUT_DIR)/%.o: src/Cores/%.cpp
+	$(ALL_SETTINGS) -c $< -o $@  
+
+
+$(TOOLS_OBJS): $(OUT_DIR)/%.o: src/Tools/%.cpp
 	$(ALL_SETTINGS) -c $< -o $@  
 
 $(RENDERING_OBJS): $(OUT_DIR)/%.o: src/Rendering/%.cpp
